@@ -89,11 +89,8 @@ export async function signup(req, res) {
       console.log(`DEV OTP for ${email}: ${emailOTP}`);
     }
 
-    try {
-      await sendEmailOTP(email, emailOTP);
-    } catch (err) {
-      console.error("Email send failed:", err?.message || err);
-    }
+    await sendEmailOTP(email, emailOTP);
+
 
     return res.status(201).json({
       message:
