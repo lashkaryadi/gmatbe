@@ -1,42 +1,49 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
-console.log("EMAIL util loaded — EMAIL_USER:", !!process.env.EMAIL_USER, "EMAIL_PASS:", !!process.env.EMAIL_PASS);
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+console.log("EMAIL util loaded — RESEND_API_KEY:", !!process.env.RESEND_API_KEY);
 
 /**
  * sendEmailOTP: send a plain text OTP email
- * to: recipient email, otp: the plain OTP
  */
 export async function sendEmailOTP(to, otp) {
-  const info = await transporter.sendMail({
-    from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
-    to,
-    subject: "Your verification OTP",
-    text: `Your verification OTP is ${otp}. It will expire in 10 minutes.`
-  });
-  return info;
+  try {
+    const response = await resend.emails.send({
+      from: "onboarding@resend.dev", // works without domain verification
+      to,
+      subject: "Your verification OTP",
+      text: `Your verification OTP is ${otp}. It will expire in 10 minutes.`,
+    });
+
+    return response;
+  } catch (error) {
+    console.error("OTP email failed:", error);
+    throw error;
+  }
 }
 
-
-
+/**
+ * sendPasswordResetEmail
+ */
 export async function sendPasswordResetEmail(to, resetUrl) {
-  const mailOptions = {
-    from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
-    to,
-    subject: "Reset your password",
-    html: `
-      <p>You requested a password reset.</p>
-      <p>Click the link below to reset your password:</p>
-      <p><a href="${resetUrl}">${resetUrl}</a></p>
-      <p>This link will expire in 1 hour.</p>
-      <p>If you did not request this, simply ignore this email.</p>
-    `
-  };
-  return transporter.sendMail(mailOptions);
+  try {
+    const response = await resend.emails.send({
+      from: "onboarding@resend.dev",
+      to,
+      subject: "Reset your password",
+      html: `
+        <p>You requested a password reset.</p>
+        <p>Click the link below to reset your password:</p>
+        <p><a href="${resetUrl}">${resetUrl}</a></p>
+        <p>This link will expire in 1 hour.</p>
+        <p>If you did not request this, simply ignore this email.</p>
+      `,
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Password reset email failed:", error);
+    throw error;
+  }
 }
