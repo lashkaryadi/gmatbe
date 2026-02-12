@@ -16,11 +16,13 @@ import paymentRoutes from "./src/routes/payment.routes.js";
 import webhookRoutes from "./src/routes/webhook.routes.js";
 
 const app = express();
+app.set('trust proxy', 1);
+
 
 /* ------------------ CORS ------------------ */
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173", "https://getmeatutor.vercel.app", "https://get-me-a-tutor.vercel.app"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
