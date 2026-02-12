@@ -10,7 +10,7 @@ console.log("EMAIL util loaded — RESEND_API_KEY:", !!process.env.RESEND_API_KE
 export async function sendEmailOTP(to, otp) {
   try {
     const response = await resend.emails.send({
-      from: "onboarding@resend.dev", // works without domain verification
+      from: "lashkary.adi@gmail.com", // works without domain verification
       to,
       subject: "Your verification OTP",
       text: `Your verification OTP is ${otp}. It will expire in 10 minutes.`,
@@ -29,7 +29,7 @@ export async function sendEmailOTP(to, otp) {
 export async function sendPasswordResetEmail(to, resetUrl) {
   try {
     const response = await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: "lashkary.adi@gmail.com",
       to,
       subject: "Reset your password",
       html: `
