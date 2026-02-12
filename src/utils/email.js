@@ -8,20 +8,24 @@ console.log("EMAIL util loaded — RESEND_API_KEY:", !!process.env.RESEND_API_KE
  * sendEmailOTP: send a plain text OTP email
  */
 export async function sendEmailOTP(to, otp) {
+  console.log("📨 Attempting to send OTP to:", to);
+
   try {
     const response = await resend.emails.send({
-      from: "lashkary.adi@gmail.com", // works without domain verification
+      from: "onboarding@resend.dev",
       to,
       subject: "Your verification OTP",
       text: `Your verification OTP is ${otp}. It will expire in 10 minutes.`,
     });
 
+    console.log("✅ OTP sent successfully:", response);
     return response;
   } catch (error) {
-    console.error("OTP email failed:", error);
-    throw error;
+    console.error("❌ OTP FAILED:", error);
+    throw error;  // IMPORTANT
   }
 }
+
 
 /**
  * sendPasswordResetEmail
@@ -29,7 +33,7 @@ export async function sendEmailOTP(to, otp) {
 export async function sendPasswordResetEmail(to, resetUrl) {
   try {
     const response = await resend.emails.send({
-      from: "lashkary.adi@gmail.com",
+      from: "onboarding@resend.dev",
       to,
       subject: "Reset your password",
       html: `
