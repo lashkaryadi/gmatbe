@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const allowedOrigins = [
-  "http://localhost:5173","https://get-me-a-tutor.vercel.app/" // frontend
+  "http://localhost:5173","https://get-me-a-tutor.vercel.app/","https://getmeatutor.vercel.app/"// frontend
 ];
 
 const corsOptions = {
